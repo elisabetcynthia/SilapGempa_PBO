@@ -280,12 +280,22 @@ public class DataBencana extends javax.swing.JFrame {
     
     private void bt_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_inputActionPerformed
         // TODO add your handling code here:
-        try {
-            stat = k.getCon().prepareStatement("INSERT INTO laporan (id_user, judul, lokasi, tanggal_lapor, status) VALUES (?, ?, ?, ?, ?)");
-            stat.setInt(1, Integer.parseInt(tf_idpelapor.getText()));
+       try {
+            stat = k.getCon().prepareStatement(
+                "INSERT INTO laporan (id_user, judul, lokasi, tanggal_lapor, status) VALUES (?, ?, ?, ?, ?)"
+            );
+
+            // solusi simple kalau tf_idpelapor kosong
+            String idText = tf_idpelapor.getText().trim();
+            if (idText.isEmpty()) {
+                stat.setNull(1, java.sql.Types.INTEGER);
+            } else {
+                stat.setInt(1, Integer.parseInt(idText));
+            }
+
             stat.setString(2, tf_judul.getText());
             stat.setString(3, tf_lokasi.getText());
-            stat.setString(4, tf_tanggal.getText()); 
+            stat.setString(4, tf_tanggal.getText());
             stat.setString(5, "Menunggu Validasi");
 
             stat.executeUpdate();
